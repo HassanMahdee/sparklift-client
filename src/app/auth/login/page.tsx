@@ -10,7 +10,6 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const validateEmail = (email: string) => {
@@ -20,17 +19,14 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
 
     if (!formData.email || !formData.password) {
-      setError("All fields are required");
       setLoading(false);
       return;
     }
 
     if (!validateEmail(formData.email)) {
-      setError("Invalid email format");
       setLoading(false);
       return;
     }
@@ -41,10 +37,9 @@ export default function LoginPage() {
         password: formData.password,
         callbackURL: "/dashboard",
       });
-
       router.push("/dashboard");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Login failed");
+      console.error("Login error:", err);
       setLoading(false);
     }
   };
@@ -56,7 +51,8 @@ export default function LoginPage() {
         callbackURL: "/dashboard",
       });
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Google sign-in failed");
+      console.error("Google sign-in error:", err);
+      setLoading(false);
     }
   };
 
@@ -70,12 +66,6 @@ export default function LoginPage() {
           >
             Welcome Back
           </h2>
-
-          {error && (
-            <div className="alert alert-error mb-4">
-              <span>{error}</span>
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="form-control">

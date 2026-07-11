@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -13,8 +14,9 @@ export default function RegisterPage() {
     profilePictureUrl: "",
     role: "supporter",
   });
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
+  const [error, setError] = useState("");
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -25,25 +27,54 @@ export default function RegisterPage() {
     return password.length >= 8;
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setImageUploading(true);
+
+    try {
+      const formDataImg = new FormData();
+      formDataImg.append("image", file);
+
+      const res = await fetch(
+        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+        {
+          method: "POST",
+          body: formDataImg,
+        },
+      );
+
+      const data = await res.json();
+
+      if (data.success) {
+        setFormData((prev) => ({
+          ...prev,
+          profilePictureUrl: data.data.url,
+        }));
+      } else {
+      }
+    } catch {
+    } finally {
+      setImageUploading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
 
     if (!formData.name || !formData.email || !formData.password) {
-      setError("All fields are required");
       setLoading(false);
       return;
     }
 
     if (!validateEmail(formData.email)) {
-      setError("Invalid email format");
       setLoading(false);
       return;
     }
 
     if (!validatePassword(formData.password)) {
-      setError("Password must be at least 8 characters");
       setLoading(false);
       return;
     }
@@ -61,11 +92,15 @@ export default function RegisterPage() {
           },
         },
       });
-
       router.push("/dashboard");
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Registration failed");
       setLoading(false);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Registration failed. Please try again.",
+      );
     }
   };
 
@@ -81,7 +116,7 @@ export default function RegisterPage() {
           </h2>
 
           {error && (
-            <div className="alert alert-error mb-4">
+            <div className="alert alert-error">
               <span>{error}</span>
             </div>
           )}
@@ -121,22 +156,33 @@ export default function RegisterPage() {
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text">
-                  Profile Picture URL (Optional)
-                </span>
+                <span className="label-text">Profile Picture (Optional)</span>
               </label>
               <input
-                type="url"
-                placeholder="https://example.com/profile.jpg"
-                className="input input-bordered w-full"
-                value={formData.profilePictureUrl}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    profilePictureUrl: e.target.value,
-                  })
-                }
+                type="file"
+                accept="image/*"
+                className="file-input file-input-bordered w-full"
+                onChange={handleImageUpload}
+                disabled={imageUploading}
               />
+              {imageUploading && (
+                <span className="loading loading-spinner loading-sm mt-2"></span>
+              )}
+              {formData.profilePictureUrl && (
+                <div className="mt-3">
+                  <p className="text-sm mb-2">Preview:</p>
+                  <p className="text-xs text-base-content/60 mb-2">
+                    {formData.profilePictureUrl}
+                  </p>
+                  <Image
+                    src={formData.profilePictureUrl}
+                    alt="Profile preview"
+                    width={96}
+                    height={96}
+                    className="w-24 h-24 rounded-full object-cover border-2 border-base-300"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="form-control">
