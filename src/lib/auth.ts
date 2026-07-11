@@ -23,13 +23,11 @@ export const auth = betterAuth({
         type: "string",
         required: false,
         defaultValue: "supporter",
-        input: false,
       },
       credits: {
         type: "number",
         required: false,
         defaultValue: 0,
-        input: false,
       },
     },
   },

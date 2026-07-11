@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { authClient } from "@/lib/auth-client";
+import { signIn, signUp } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
@@ -86,7 +86,7 @@ export default function RegisterPage() {
     }
 
     try {
-      await authClient.signUp.email({
+      await signUp.email({
         email: formData.email,
         password: formData.password,
         name: formData.name,
@@ -249,7 +249,7 @@ export default function RegisterPage() {
           <button
             className="btn btn-outline w-full"
             onClick={() =>
-              authClient.signIn.social({
+              signIn.social({
                 provider: "google",
                 callbackURL: "/dashboard",
               })
