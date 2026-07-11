@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -23,11 +24,13 @@ export default function LoginPage() {
 
     if (!formData.email || !formData.password) {
       setLoading(false);
+      toast.error("Please fill in all fields");
       return;
     }
 
     if (!validateEmail(formData.email)) {
       setLoading(false);
+      toast.error("Please enter a valid email address");
       return;
     }
 
@@ -37,9 +40,12 @@ export default function LoginPage() {
         password: formData.password,
         callbackURL: "/dashboard",
       });
+      toast.success("Login successful!");
       router.push("/dashboard");
     } catch (err: unknown) {
-      console.error("Login error:", err);
+      const errorMessage =
+        err instanceof Error ? err.message : "Login failed. Please try again.";
+      toast.error(errorMessage);
       setLoading(false);
     }
   };
@@ -51,7 +57,11 @@ export default function LoginPage() {
         callbackURL: "/dashboard",
       });
     } catch (err: unknown) {
-      console.error("Google sign-in error:", err);
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Google sign-in failed. Please try again.";
+      toast.error(errorMessage);
       setLoading(false);
     }
   };

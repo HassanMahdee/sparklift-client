@@ -4,6 +4,7 @@ import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -16,7 +17,6 @@ export default function RegisterPage() {
   });
   const [loading, setLoading] = useState(false);
   const [imageUploading, setImageUploading] = useState(false);
-  const [error, setError] = useState("");
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -52,9 +52,12 @@ export default function RegisterPage() {
           ...prev,
           profilePictureUrl: data.data.url,
         }));
+        toast.success("Profile picture uploaded successfully");
       } else {
+        toast.error("Failed to upload image");
       }
     } catch {
+      toast.error("Failed to upload image");
     } finally {
       setImageUploading(false);
     }
@@ -66,16 +69,19 @@ export default function RegisterPage() {
 
     if (!formData.name || !formData.email || !formData.password) {
       setLoading(false);
+      toast.error("Please fill in all required fields");
       return;
     }
 
     if (!validateEmail(formData.email)) {
       setLoading(false);
+      toast.error("Please enter a valid email address");
       return;
     }
 
     if (!validatePassword(formData.password)) {
       setLoading(false);
+      toast.error("Password must be at least 8 characters");
       return;
     }
 
@@ -89,18 +95,19 @@ export default function RegisterPage() {
         fetchOptions: {
           body: {
             role: formData.role,
+            credits: formData.role === "creator" ? 20 : 50,
           },
         },
       });
+      toast.success("Account created successfully!");
       router.push("/dashboard");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Registration failed");
-      setLoading(false);
-      setError(
+      const errorMessage =
         err instanceof Error
           ? err.message
-          : "Registration failed. Please try again.",
-      );
+          : "Registration failed. Please try again.";
+      toast.error(errorMessage);
+      setLoading(false);
     }
   };
 
@@ -114,12 +121,6 @@ export default function RegisterPage() {
           >
             Create Account
           </h2>
-
-          {error && (
-            <div className="alert alert-error">
-              <span>{error}</span>
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="form-control">
