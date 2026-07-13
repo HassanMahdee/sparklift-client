@@ -13,7 +13,7 @@ export default function RegisterPage() {
     email: "",
     password: "",
     profilePictureUrl: "",
-    role: "supporter",
+    role: "creator",
   });
   const [loading, setLoading] = useState(false);
   const [imageUploading, setImageUploading] = useState(false);
@@ -221,7 +221,7 @@ export default function RegisterPage() {
                   className="text-sm mt-2 font-semibold"
                   style={{ color: "var(--color-success)" }}
                 >
-                  New supporters will get free 50 credits
+                  New supporters will get free 50 credits..(soon)
                 </p>
               )}
               {formData.role === "creator" && (

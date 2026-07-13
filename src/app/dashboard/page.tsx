@@ -89,17 +89,6 @@ export default function DashboardPage() {
                 </div>
               </div>
             </div>
-
-            <div className="mt-6">
-              <button
-                className="btn btn-outline"
-                onClick={() => {
-                  window.location.href = "/auth/login";
-                }}
-              >
-                Logout
-              </button>
-            </div>
           </div>
         </div>
       </div>

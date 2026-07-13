@@ -1,0 +1,71 @@
+import { authClient } from "./auth-client";
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
+async function getAuthToken() {
+  const { data: session } = await authClient.getSession();
+  return session?.session?.token || null;
+}
+
+export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
+  const url = `${API_BASE_URL}${endpoint}`;
+  const token = await getAuthToken();
+
+  const { headers: customHeaders, ...restOptions } = options;
+
+  const defaultOptions = {
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+      ...customHeaders,
+    },
+  };
+
+  const response = await fetch(url, { ...defaultOptions, ...restOptions });
+
+  if (!response.ok) {
+    const error = await response
+      .json()
+      .catch(() => ({ message: "An error occurred" }));
+    throw new Error(error.message || `HTTP error! status: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+export async function get(
+  endpoint: string,
+  params: Record<string, unknown> = {},
+) {
+  const cleanParams = Object.fromEntries(
+    Object.entries(params)
+      .filter(([, value]) => value !== undefined && value !== null && value !== "")
+      .map(([, value]) => [String(value), String(value)]),
+  );
+
+  const queryString = new URLSearchParams(
+    cleanParams as Record<string, string>,
+  ).toString();
+  return fetchAPI(queryString ? `${endpoint}?${queryString}` : endpoint);
+}
+
+export async function post(endpoint: string, data: unknown) {
+  return fetchAPI(endpoint, {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function patch(endpoint: string, data: unknown) {
+  return fetchAPI(endpoint, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function del(endpoint: string, data: unknown) {
+  return fetchAPI(endpoint, {
+    method: "DELETE",
+    body: JSON.stringify(data),
+  });
+}
