@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSession, signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { ThemeToggleBtn } from "./theme-toggle-btn";
 
 const publicLinks = [
   { href: "/", label: "Home" },
@@ -64,6 +65,7 @@ export default function Navbar() {
         )}
       </div>
       <div className="navbar-end gap-2">
+        <ThemeToggleBtn />
         {isPending ? (
           <span className="loading loading-spinner loading-sm"></span>
         ) : session ? (
