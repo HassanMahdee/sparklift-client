@@ -6,6 +6,7 @@ import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import Navbar from "@/components/shared/navbar/navbar";
+import Footer from "@/components/shared/footer/footer";
 import { Providers } from "@/components/providers";
 
 const jakartaSans = Plus_Jakarta_Sans({
@@ -37,6 +38,7 @@ export default function RootLayout({
         <Providers>
           <Navbar />
           {children}
+          <Footer />
           <Toaster position="top-center" />
         </Providers>
       </body>
