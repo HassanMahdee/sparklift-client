@@ -9,6 +9,7 @@ const footerLinks = [
   { href: "/", label: "Home" },
   { href: "/explore", label: "Explore" },
   { href: "/about", label: "About" },
+  { href: "/terms", label: "Terms" },
 ];
 
 const socialLinks = [
@@ -144,75 +145,75 @@ export default function Footer() {
               </motion.p>
             </motion.div>
 
-              {/* Quick Links */}
-              <motion.div variants={itemVariants} className="space-y-4">
-                <motion.h3
-                  variants={itemVariants}
-                  className="font-semibold text-base-content"
-                >
-                  Quick Links
-                </motion.h3>
-                <motion.ul variants={itemVariants} className="space-y-2">
-                  {footerLinks.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="text-base-content/70 hover:text-primary transition-colors text-sm"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                  {session && (
-                    <li>
-                      <Link
-                        href="/dashboard"
-                        className="text-base-content/70 hover:text-primary transition-colors text-sm"
-                      >
-                        Dashboard
-                      </Link>
-                    </li>
-                  )}
-                </motion.ul>
-              </motion.div>
+            {/* Quick Links */}
+            <motion.div variants={itemVariants} className="space-y-4">
+              <motion.h3
+                variants={itemVariants}
+                className="font-semibold text-base-content"
+              >
+                Quick Links
+              </motion.h3>
+              <motion.ul variants={itemVariants} className="space-y-2">
+                {footerLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-base-content/70 hover:text-primary transition-colors text-sm"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+                {session && (
+                  <li>
+                    <Link
+                      href="/dashboard"
+                      className="text-base-content/70 hover:text-primary transition-colors text-sm"
+                    >
+                      Dashboard
+                    </Link>
+                  </li>
+                )}
+              </motion.ul>
+            </motion.div>
 
-              {/* Resources */}
-              <motion.div variants={itemVariants} className="space-y-4">
-                <motion.h3
-                  variants={itemVariants}
-                  className="font-semibold text-base-content"
-                >
-                  Resources
-                </motion.h3>
-                <motion.ul variants={itemVariants} className="space-y-2">
-                  <li>
-                    <Link
-                      href="/about"
-                      className="text-base-content/70 hover:text-primary transition-colors text-sm"
-                    >
-                      About Us
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/explore"
-                      className="text-base-content/70 hover:text-primary transition-colors text-sm"
-                    >
-                      Explore Campaigns
-                    </Link>
-                  </li>
-                  <li>
-                    <a
-                      href="https://github.com/HassanMahdee"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-base-content/70 hover:text-primary transition-colors text-sm"
-                    >
-                      Join Developer
-                    </a>
-                  </li>
-                </motion.ul>
-              </motion.div>
+            {/* Resources */}
+            <motion.div variants={itemVariants} className="space-y-4">
+              <motion.h3
+                variants={itemVariants}
+                className="font-semibold text-base-content"
+              >
+                Resources
+              </motion.h3>
+              <motion.ul variants={itemVariants} className="space-y-2">
+                <li>
+                  <Link
+                    href="/about"
+                    className="text-base-content/70 hover:text-primary transition-colors text-sm"
+                  >
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/explore"
+                    className="text-base-content/70 hover:text-primary transition-colors text-sm"
+                  >
+                    Explore Campaigns
+                  </Link>
+                </li>
+                <li>
+                  <a
+                    href="https://github.com/HassanMahdee"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-base-content/70 hover:text-primary transition-colors text-sm"
+                  >
+                    Join Developer
+                  </a>
+                </li>
+              </motion.ul>
+            </motion.div>
 
             {/* Social Links */}
             <motion.div variants={itemVariants} className="space-y-4">

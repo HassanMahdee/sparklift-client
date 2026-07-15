@@ -13,6 +13,7 @@ const publicLinks = [
   { href: "/", label: "Home" },
   { href: "/explore", label: "Explore" },
   { href: "/about", label: "About" },
+  { href: "/terms", label: "Terms" },
 ];
 
 export default function Navbar() {
