@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface MobileSidebarProps {
@@ -32,6 +32,7 @@ export function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const { data: session } = useSession();
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleLogout = async () => {
     await signOut();
@@ -104,7 +105,9 @@ export function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                     <Link
                       href={link.href}
                       onClick={onClose}
-                      className="block p-4 rounded-xl hover:bg-base-200 transition-colors font-medium text-lg"
+                      className={`block p-4 rounded-xl hover:bg-base-200 transition-colors font-medium text-lg ${
+                        pathname === link.href ? "text-primary bg-base-200" : ""
+                      }`}
                     >
                       {link.label}
                     </Link>
@@ -122,7 +125,11 @@ export function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                       <Link
                         href="/dashboard"
                         onClick={onClose}
-                        className="block p-4 rounded-xl hover:bg-base-200 transition-colors font-medium text-lg"
+                        className={`block p-4 rounded-xl hover:bg-base-200 transition-colors font-medium text-lg ${
+                          pathname === "/dashboard"
+                            ? "text-primary bg-base-200"
+                            : ""
+                        }`}
                       >
                         Dashboard
                       </Link>

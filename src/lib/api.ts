@@ -39,7 +39,9 @@ export async function get(
 ) {
   const cleanParams = Object.fromEntries(
     Object.entries(params)
-      .filter(([, value]) => value !== undefined && value !== null && value !== "")
+      .filter(
+        ([, value]) => value !== undefined && value !== null && value !== "",
+      )
       .map(([, value]) => [String(value), String(value)]),
   );
 
@@ -68,4 +70,66 @@ export async function del(endpoint: string, data: unknown) {
     method: "DELETE",
     body: JSON.stringify(data),
   });
+}
+
+// Campaign-specific API functions
+
+export async function getCampaigns(query?: string) {
+  return get(`/api/campaigns?${query}`);
+}
+
+export async function getFeaturedCampaigns() {
+  return get("/api/campaigns/featured");
+}
+
+export async function getCampaignsByCreator(creatorEmail: string) {
+  return get(`/api/campaigns/creator/${creatorEmail}`);
+}
+
+export async function getCampaignById(id: string) {
+  return get(`/api/campaigns/${id}`);
+}
+
+export async function createCampaign(data: {
+  title: string;
+  description: string;
+  image?: string;
+  category?: string;
+  raised?: number;
+  goal?: number;
+  deadline?: string;
+  organizer?: string;
+  minContribution?: number;
+  status: string;
+  creatorEmail: string;
+  rewards?: string;
+  story?: string;
+  featured?: boolean;
+}) {
+  return post("/api/campaigns", data);
+}
+
+export async function updateCampaign(
+  id: string,
+  data: Partial<{
+    title: string;
+    description: string;
+    image: string;
+    category: string;
+    raised: number;
+    goal: number;
+    deadline: string;
+    organizer: string;
+    minContribution: number;
+    status: string;
+    rewards: string;
+    story: string;
+    featured: boolean;
+  }>,
+) {
+  return patch(`/api/campaigns/${id}`, data);
+}
+
+export async function deleteCampaign(id: string) {
+  return del(`/api/campaigns/${id}`, {});
 }

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSession, signOut } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { ThemeToggleBtn } from "./theme-toggle-btn";
 import { HamburgerMenu } from "./hamburger-menu";
 import { MobileSidebar } from "./mobile-sidebar";
@@ -17,6 +17,7 @@ const publicLinks = [
 
 export default function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const { data: session, isPending } = useSession();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -49,7 +50,9 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="hover:text-primary transition-colors font-medium"
+              className={`hover:text-primary transition-colors font-medium ${
+                pathname === link.href ? "text-primary" : ""
+              }`}
             >
               {link.label}
             </Link>
@@ -58,7 +61,9 @@ export default function Navbar() {
             <>
               <Link
                 href="/dashboard"
-                className="hover:text-primary transition-colors font-medium"
+                className={`hover:text-primary transition-colors font-medium ${
+                  pathname === "/dashboard" ? "text-primary" : ""
+                }`}
               >
                 Dashboard
               </Link>
